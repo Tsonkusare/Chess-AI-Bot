@@ -1,0 +1,126 @@
+import random
+
+pieceScore = {"K": 0, "Q": 10, "R": 5, "B": 3, "N": 3, "p": 1}
+CHECKMATE = 1000
+STALEMATE = 0 
+DEPTH = 3
+
+'''
+Picks and return a random move.
+'''
+def findRandomMove(validMoves):
+    return validMoves[random.randint(0, len(validMoves)-1)]
+
+'''
+Find the best move based on material alone.
+'''
+def findBestMove(gs, validMoves):
+    turnMultiplier = 1 if gs.whiteToMove else -1
+    opponentMinMaxScore = CHECKMATE
+    bestplayerMove = None
+    random.shuffle(validMoves)
+    for playerMove in validMoves:
+        gs.makeMove(playerMove)
+        opponentsMoves = gs.getValidMoves()
+        if gs.stalemate:
+            opponentMaxScore = STALEMATE
+        elif gs.checkMate:
+            opponentMaxScore = -CHECKMATE
+        else:
+            opponentMaxScore = -CHECKMATE
+            for opponentsMove in opponentsMoves:
+                gs.makeMove(opponentsMove)
+                gs.getValidMoves()
+                if gs.checkMate:
+                    score = CHECKMATE
+                elif gs.stalemate:
+                    score = STALEMATE
+                else:
+                    score =  -turnMultiplier * scoreMaterial(gs.board)
+                if score > opponentMaxScore:
+                    opponentMaxScore = score
+                gs.undoMove()
+        if opponentMinMaxScore > opponentMaxScore:
+            opponentMinMaxScore = opponentMaxScore
+            bestplayerMove = playerMove
+        gs.undoMove()
+    return bestplayerMove
+    
+    
+def findBestMoveMinMax(gs, validMoves):
+    '''
+    Helper method to make first recursive call
+    '''
+    global nextMove
+    nextMove = None
+    findMoveMinMax(gs, validMoves, DEPTH, gs.whiteToMove)
+    return nextMove
+
+def findMoveMinMax(gs, validMoves, depth, whiteToMove):
+    global nextMove
+    if depth == 0:
+        return scoreMaterial(gs.board)
+    
+    if whiteToMove:
+        maxScore = -CHECKMATE
+        for move in validMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getValidMoves()
+            score = findMoveMinMax(gs, nextMoves, depth - 1, False)
+            if score > maxScore:
+                maxScore = score
+                if depth == DEPTH:
+                    nextMove = move
+            gs.undoMove()
+        return maxScore
+    
+    else:
+        minScore = CHECKMATE
+        for move in validMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getValidMoves()
+            score = findMoveMinMax(gs, nextMoves, depth - 1, True)
+            if score < minScore:
+                minScore = score
+                if depth == DEPTH:
+                    nextMove = move
+            gs.undoMove()
+        return minScore
+            
+
+'''
+A positive score is good for white, a negative score is good for black
+'''
+def scoreBoard(gs):
+    if gs.checkMate:
+        if gs.whiteToMove:
+            return -CHECKMATE
+        else:
+            return CHECKMATE
+    elif gs.stalemate:
+        return STALEMATE
+    
+    score = 0
+    for row in gs.board:
+        for square in row:
+            if square[0] == 'w':
+                score += pieceScore[square[1]]
+            elif square[1] == 'b':
+                score -= pieceScore[square[1]]
+    
+    return score
+
+
+'''
+Score the board based on material.
+'''
+def scoreMaterial(board):
+    score = 0
+    for row in board:
+        for square in row:
+            if square[0] == 'w':
+                score += pieceScore[square[1]]
+            elif square[1] == 'b':
+                score -= pieceScore[square[1]]
+    
+    return score
