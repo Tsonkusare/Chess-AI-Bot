@@ -37,6 +37,37 @@ This is a Python-based chess game featuring a graphical interface built using `p
 - Press `R` to reset the game.
 - Set `playerOne` and `playerTwo` in `ChessMain.py` to toggle human vs. AI.
 
+## 👥 Switching Between AI and Human Players
+
+In `ChessMain.py`, you can change the `playerOne` and `playerTwo` variables to control who plays as white and black:
+
+```python
+playerOne = True  # If True, human plays white. If False, AI plays white.
+playerTwo = False # If True, human plays black. If False, AI plays black.
+```
+
+Examples:
+- Human vs AI (White): `playerOne = True`, `playerTwo = False`
+- AI vs Human (Black): `playerOne = False`, `playerTwo = True`
+- Human vs Human: `playerOne = True`, `playerTwo = True`
+- AI vs AI: `playerOne = False`, `playerTwo = False`
+
+## ♙ Pawn Promotion
+
+When a pawn reaches the last rank (the 8th for white, 1st for black), you'll be prompted to enter the piece you'd like to promote to:
+
+```
+Promote to Q, R, B, or N:
+```
+
+Just type:
+- `Q` for Queen
+- `R` for Rook
+- `B` for Bishop
+- `N` for Knight
+
+⚠️ Note: The promotion currently happens via console input. Make sure your terminal is active when the prompt appears.
+
 ## 🏁 Features
 
 - Castling (both sides)
@@ -48,7 +79,7 @@ This is a Python-based chess game featuring a graphical interface built using `p
 
 ## 📸 Screenshot
 
-*(Add your screenshot here)*
+![Gameplay Screenshot](/gameplay image.png)
 
 ## 🧩 Future Improvements
 
