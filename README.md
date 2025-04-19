@@ -79,7 +79,7 @@ Just type:
 
 ## 📸 Screenshot
 
-![Gameplay Screenshot](/gameplay image.png)
+<img width="765" alt="Image" src="https://github.com/user-attachments/assets/69bccb38-3d4d-4fa9-92d5-49187f636c07" />
 
 ## 🧩 Future Improvements
 
